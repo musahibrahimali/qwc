@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qwc/index.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfilePge extends StatefulWidget {
   static const String id = 'profile_page';
@@ -32,7 +33,7 @@ class _ProfilePgeState extends State<ProfilePge> {
                 image: const DecorationImage(
                   image: AssetImage(Assets.imagesWaveBackground),
                   fit: BoxFit.cover,
-                  opacity: 0.2,
+                  // opacity: 0.2,
                 ),
               ),
             ),
@@ -70,7 +71,7 @@ class _ProfilePgeState extends State<ProfilePge> {
                         Obx(
                           () => CustomText(
                             text: userController.currentUserInfo.fullName ?? "User Name",
-                            fontSize: 20.0,
+                            fontSize: 2.0.h,
                           ),
                         ),
                       ],
@@ -101,7 +102,8 @@ class _ProfilePgeState extends State<ProfilePge> {
                         Obx(
                           () => CustomText(
                             text: userController.currentUserInfo.email ?? "user@email.com",
-                            fontSize: 20.0,
+                            fontSize: 2.0.h,
+                            maxLines: 2,
                           ),
                         ),
                       ],
@@ -123,6 +125,7 @@ class _ProfilePgeState extends State<ProfilePge> {
                       title: "Logout",
                       buttonColor: BrandColors.colorBlue,
                       borderRadius: 20.0,
+                      fontSize: 2.5.h,
                       onPressed: () {
                         // logout user
                         FirebaseAuth.instance.signOut();

@@ -53,17 +53,27 @@ class HelperMethods {
     DatabaseReference dataRef = FirebaseDatabase.instance.ref(path);
     dataRef.onValue.listen((DatabaseEvent event) {
       dynamic data = event.snapshot.value;
-      // create a map for the data
-      final Map<String, dynamic> dataMap = {
-        'Epoch timestamp': data['Epoch timestamp'],
-        'turbidity': data['turbidity'],
-        'tds': data['tds'],
-        'pH': data['pH'],
-        'temperature': data['temperature'],
-      };
-      dataController.updateData(DataModel.fromJson(dataMap));
-      // updateStarCount(data);
-      // debugPrint('data: ${dataController.data.turbidity}');
+      // first clear the data list in the data controller class
+      dataController.clearData();
+      // loop through all the data and print it
+      data.forEach((key, value) {
+        // var doubleValue = double.tryParse(value['pH']);
+        var turbidityValue = double.tryParse(value['turbidity']);
+        var tdsValue = double.tryParse(value['tds']);
+        var phValue = double.tryParse(value['pH']);
+        var temperatureValue = double.tryParse(value['temperature']);
+        // debugPrint("data $doubleValue");
+        // debugPrint("data $value");
+        // create a map for the data
+        final Map<String, dynamic> dataMap = {
+          'timestamp': value['timestamp'],
+          'turbidity': turbidityValue,
+          'tds': tdsValue,
+          'pH': phValue,
+          'temperature': temperatureValue,
+        };
+        dataController.addData(DataModel.fromJson(dataMap));
+      });
     });
   }
 }

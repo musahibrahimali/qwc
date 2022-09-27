@@ -4,5 +4,7 @@ class Assets {
 
   static const String imagesBackground = 'assets/images/background.jpg';
   static const String imagesProfileIcon = 'assets/images/profile_icon.png';
+  static const String imagesQwcBackground = 'assets/images/qwc_background.jpg';
   static const String imagesWaveBackground = 'assets/images/wave_background.jpg';
+
 }

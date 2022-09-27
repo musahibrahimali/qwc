@@ -1,9 +1,9 @@
 class DataModel {
-  String? epochTime;
-  String? pH;
-  String? tds;
-  String? temperature;
-  String? turbidity;
+  int? epochTime;
+  double? pH;
+  double? tds;
+  double? temperature;
+  double? turbidity;
 
   DataModel({
     this.epochTime,
@@ -16,11 +16,11 @@ class DataModel {
   // from json
   factory DataModel.fromJson(Map<String, dynamic> json) {
     return DataModel(
-      epochTime: json['Epoch timestamp'].toString(),
-      pH: json['pH'].toString(),
-      tds: json['tds'].toString(),
-      temperature: json['temperature'].toString(),
-      turbidity: json['turbidity'].toString(),
+      epochTime: json['timestamp'] ?? "",
+      pH: json['pH'] ?? "",
+      tds: json['tds'] ?? "",
+      temperature: json['temperature'] ?? "",
+      turbidity: json['turbidity'] ?? "",
     );
   }
 

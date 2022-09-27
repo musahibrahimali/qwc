@@ -29,10 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if (userController.currentUserInfo.id == null) {
       HelperMethods.instance.fetchUserProfile();
     }
+    HelperMethods.instance.subscribeToData("Data");
+
     pageController = PageController(initialPage: selectedBottomBarIndex);
     pages = [
-      const HomePage(),
       const MonitorPage(),
+      const HomePage(),
       const TipsPage(),
       const ProfilePge(),
     ];

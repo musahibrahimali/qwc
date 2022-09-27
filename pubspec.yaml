@@ -27,14 +27,17 @@ dependencies:
   line_awesome_flutter: ^2.0.0
   fl_chart: ^0.55.1
   auto_size_text: ^3.0.0
-  popover: ^0.2.6+3
   kumi_popup_window: ^2.0.1
+  flutter_email_sender: ^5.1.0
+  charts_flutter: ^0.12.0
+  responsive_sizer: ^3.1.0
+  pull_to_refresh: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true

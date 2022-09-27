@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:qwc/index.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -11,7 +14,123 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   bool _isCollapsed = false;
-  TextEditingController feedbackController = TextEditingController();
+
+  final TextEditingController feedbackController = TextEditingController();
+  List<String> attachments = [];
+  bool isHTML = false;
+
+  final TextEditingController recipientController = TextEditingController(text: 'quedjofrempong@gmail.com');
+  final TextEditingController subjectController = TextEditingController(text: '${userController.currentUserInfo.fullName} - Feedback');
+
+  Future<void> sendMail() async {
+    FocusScope.of(context).unfocus();
+    showLoading(context);
+    final Email email = Email(
+      body: feedbackController.text,
+      subject: subjectController.text,
+      recipients: [recipientController.text],
+      attachmentPaths: attachments,
+      isHTML: isHTML,
+    );
+
+    try {
+      await FlutterEmailSender.send(email);
+      if (!mounted) return;
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
+      showFlushAlert(context, "Thank you for your feedback");
+      feedbackController.text = "";
+    } catch (error) {
+      debugPrint(error.toString());
+      Navigator.pop(context);
+      showFlushAlert(context, "There was an error sending feedback");
+    }
+  }
+
+  void handleFeedback() {
+    // show a dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: CustomText(
+              text: 'Help & Feedback',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w900,
+              color: BrandColors.colorText,
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceBetween,
+          actionsOverflowDirection: VerticalDirection.down,
+          elevation: 10.0,
+          content: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  // add an input text field
+                  TextFormField(
+                    controller: feedbackController,
+                    keyboardType: TextInputType.text,
+                    maxLines: 10,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      labelText: 'Get in touch with us',
+                      labelStyle: GoogleFonts.poppins(
+                        color: BrandColors.colorText,
+                        fontSize: 1.5.h,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      hintText: "Your feedback",
+                      hintStyle: GoogleFonts.poppins(
+                        color: BrandColors.colorText.withOpacity(0.5),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: BrandButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    title: 'cancel',
+                    buttonColor: Colors.transparent,
+                    titleColor: BrandColors.colorPink,
+                    fontSize: 1.3.h,
+                  ),
+                ),
+                Expanded(
+                  child: BrandButton(
+                    onPressed: () {
+                      sendMail();
+                    },
+                    title: 'send',
+                    fontSize: 1.3.h,
+                    buttonColor: Colors.transparent,
+                    titleColor: BrandColors.colorPink,
+                  ),
+                ),
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,76 +203,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
               CustomListTile(
                 onTap: () {
-                  Navigator.pop(context);
-                  // show a dialog
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Center(
-                          child: CustomText(
-                            text: 'Help & Feedback',
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w900,
-                            color: BrandColors.colorText,
-                          ),
-                        ),
-                        actionsAlignment: MainAxisAlignment.spaceBetween,
-                        actionsOverflowDirection: VerticalDirection.down,
-                        elevation: 10.0,
-                        content: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                // add an input text field
-                                TextFormField(
-                                  controller: feedbackController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: 80,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Your feedback',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        actions: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: BrandButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  title: 'cancel',
-                                  buttonColor: Colors.transparent,
-                                  titleColor: BrandColors.colorPink,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                              Expanded(
-                                child: BrandButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  title: 'send',
-                                  fontSize: 16.0,
-                                  buttonColor: Colors.transparent,
-                                  titleColor: BrandColors.colorPink,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      );
-                    },
-                  );
+                  handleFeedback();
                 },
                 isCollapsed: _isCollapsed,
                 icon: LineAwesomeIcons.helping_hands,
